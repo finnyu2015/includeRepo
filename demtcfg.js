@@ -6,7 +6,7 @@ demtcfg.isBridge=function(){
 	return demtcfg.bridge==='true' ;
 }
 
-demtcfg.zipcode = (demtcfg.bridge !== "false") ;
+demtcfg.zipcode = false ;
 demtcfg.portalHref="icscApp.html#demjPortal";
 
 
