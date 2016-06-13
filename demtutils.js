@@ -383,7 +383,7 @@ var dem = (function() {
             }
 
 
-            login2home(compId, userId, pwd, 'home');
+            login2home(compId, userId, pwd, portalPage);
 
             saveData('_compId', compId);
             saveData('_userId', userId);
