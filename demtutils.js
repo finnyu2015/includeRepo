@@ -1,4 +1,3 @@
-
 function demGetUrlsuffix() {
 		var bridge = demtcfg.isBridge() ;
     return bridge ? '.func' : '';
@@ -73,34 +72,44 @@ var dem = (function() {
         });
     }
 
+    function timeoutAndRepost(resp) {
+        if (counter++ < 3) {
+            var redo = function() {
+                var _rq = resp.getResponseHeader('_rq');
+                var postcontent = repostPool[_rq];
+                if (!postcontent) {
+                    console.error('_rq[' + _rq + '] has no content');
+                    return;
+                } else {
+                    console.log('repost _rq[' + _rq + ']...');
+                }
+                showMask('relogin..');
+                $.ajax(postcontent); // repost
+            }
+            signon4timeout(redo);
+        } else {
+            console.log('401 twice!');
+        }
+    }
     $.ajaxSetup({
         // contentType:'application/x-www-form-urlencoded; charset=UTF-8',
         statusCode: {
             401: function(resp) {
-                if (counter++ < 3) {
-                    var redo = function() {
-                        var _rq = resp.getResponseHeader('_rq');
-                        var postcontent = repostPool[_rq];
-                        if (!postcontent) {
-                            console.error('_rq[' + _rq + '] has no content');
-                            return;
-                        } else {
-                            console.log('repost _rq[' + _rq + ']...');
-                        }
-                        showMask('relogin..');
-                        $.ajax(postcontent); // repost                      
-                    }
-                    signon4timeout(redo);
-                } else {
-                    console.log('401 twice!');
-                }
+                timeoutAndRepost(resp);
             },
             500: function(resp) {
                 toast(resp.responseText, true);
                 counter = 0;
             },
-            200: function() {
+            200: function(resp) {
                 counter = 0;
+                if (resp.i) {
+                	if (resp.i.gk_js) {
+                		if (resp.i.gk_js.indexOf('gk.sessionTimeOutHandler')>-1) {
+                			location.href='../dem/demhApp.html';
+                		}
+                	}
+                }
             },
             408: function() { // Request Timeout for secured token
                 if (counter++ < 3) {
@@ -314,7 +323,11 @@ var dem = (function() {
     }
 
     function dec(mykey, encrypted) {
-        return CryptoJS.AES.decrypt(encrypted, mykey).toString(CryptoJS.enc.Utf8);
+        if (window.CryptoJS){
+            return CryptoJS.AES.decrypt(encrypted, mykey).toString(CryptoJS.enc.Utf8);
+        } else {
+            throw new Error("Module[CryptoJS] not loaded !") ;
+        }
     }
 
     function clearLoginData() {
