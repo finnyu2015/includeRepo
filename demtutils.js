@@ -98,7 +98,7 @@ var dem = (function() {
                 timeoutAndRepost(resp);
             },
             500: function(resp) {
-            	showMask('使用者或密码输入错误');
+            	alert('使用者或密码输入错误');
                 //toast(resp.responseText, true);
                 counter = 0;
             },
