@@ -98,7 +98,8 @@ var dem = (function() {
                 timeoutAndRepost(resp);
             },
             500: function(resp) {
-                toast(resp.responseText, true);
+            	showMask('使用者或密码输入错误');
+                //toast(resp.responseText, true);
                 counter = 0;
             },
             200: function(resp) {
