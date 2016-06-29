@@ -1,3 +1,4 @@
+
 function demGetUrlsuffix() {
 		var bridge = demtcfg.isBridge() ;
     return bridge ? '.func' : '';
@@ -129,7 +130,7 @@ var dem = (function() {
                 var conj = url.indexOf('?') > -1 ? '&' : '?';
                 setting.url += conj + "_rq=" + (++reqId);
             }
-            if(demtcfg.erpHostTest) {
+            if(demtcfg.erpHostTest == true) {
             	var conj = setting.url.indexOf('?') > -1 ? '&' : '?';
                 setting.url += conj + "testenv=" + "true";
             }
