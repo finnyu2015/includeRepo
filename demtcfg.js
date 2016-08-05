@@ -1,6 +1,6 @@
 var demtcfg = {} ;
-//demtcfg.bridge = "false" ;
- demtcfg.bridge = "true" ;
+demtcfg.bridge = "false" ;
+ //demtcfg.bridge = "true" ;
 
 demtcfg.isBridge=function(){
 	return demtcfg.bridge==='true' ;
